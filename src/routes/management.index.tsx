@@ -13,59 +13,79 @@ export const Route = createFileRoute("/management/")({
 function ManagementDashboard() {
   return (
     <PortalShell role="management" title="Management Dashboard">
-      <div className="space-y-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <StatCard label="OPD Today" value={summary.opdToday} icon={<Users className="h-5 w-5" />} accent="primary" />
-          <StatCard label="Admissions" value={summary.admissionsToday} icon={<Activity className="h-5 w-5" />} accent="info" />
-          <StatCard label="Available Beds" value={summary.availableBeds} icon={<BedDouble className="h-5 w-5" />} accent="success" />
-          <StatCard label="Discharges" value={summary.dischargesToday} icon={<Discharge className="h-5 w-5" />} accent="warning" />
-          <StatCard label="Revenue" value={currency(summary.revenueToday)} icon={<IndianRupee className="h-5 w-5" />} accent="success" />
+      <div className="space-y-8 max-w-7xl mx-auto pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          <StatCard label="OPD Today" value={summary.opdToday} icon={<Users />} accent="primary" trend="+12%" trendUp={true} />
+          <StatCard label="Admissions" value={summary.admissionsToday} icon={<Activity />} accent="info" trend="+2" trendUp={true} />
+          <StatCard label="Available Beds" value={summary.availableBeds} icon={<BedDouble />} accent="warning" trend="-4" trendUp={false} />
+          <StatCard label="Discharges" value={summary.dischargesToday} icon={<Discharge />} accent="success" trend="+5" trendUp={true} />
+          <StatCard label="Revenue" value={currency(summary.revenueToday)} icon={<IndianRupee />} accent="success" trend="+8.5%" trendUp={true} />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          <Card className="p-5 lg:col-span-2 shadow-card">
-            <h2 className="text-base font-semibold">Ward Occupancy</h2>
-            <p className="text-xs text-muted-foreground">Live bed utilization across wards</p>
-            <div className="mt-4 space-y-4">
+        <div className="grid lg:grid-cols-3 gap-8">
+          <Card className="p-6 lg:col-span-2 shadow-card border-border">
+            <div className="mb-6">
+              <h2 className="text-lg font-bold text-foreground">Ward Occupancy</h2>
+              <p className="text-sm text-muted-foreground">Live bed utilization across wards</p>
+            </div>
+            <div className="space-y-5">
               {wardOccupancy.map((w) => {
                 const pct = Math.round((w.used / w.total) * 100);
                 return (
                   <div key={w.name}>
-                    <div className="flex justify-between text-sm mb-1.5">
-                      <span className="font-medium">{w.name}</span>
-                      <span className="text-muted-foreground">{w.used} / {w.total}</span>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="font-semibold text-foreground">{w.name}</span>
+                      <span className="text-muted-foreground font-medium">{w.used} / {w.total}</span>
                     </div>
-                    <Progress value={pct} className="h-2" />
+                    <Progress value={pct} className="h-2.5 bg-muted" />
                   </div>
                 );
               })}
             </div>
           </Card>
 
-          <Card className="p-5 shadow-card">
-            <h2 className="text-base font-semibold">Doctor Activity</h2>
-            <p className="text-xs text-muted-foreground">Patients seen today</p>
-            <ul className="mt-4 space-y-3">
+          <Card className="p-6 shadow-card border-border">
+            <div className="mb-6">
+              <h2 className="text-lg font-bold text-foreground">Doctor Activity</h2>
+              <p className="text-sm text-muted-foreground">Patients seen today</p>
+            </div>
+            <ul className="space-y-4">
               {doctorActivity.map((d) => (
-                <li key={d.name} className="flex items-center justify-between">
+                <li key={d.name} className="flex items-center justify-between p-3 rounded-xl bg-muted/50 border border-border">
                   <div>
-                    <p className="text-sm font-medium">{d.name}</p>
-                    <p className="text-xs text-muted-foreground">{d.specialization}</p>
+                    <p className="text-sm font-bold text-foreground">{d.name}</p>
+                    <p className="text-xs font-medium text-muted-foreground">{d.specialization}</p>
                   </div>
-                  <span className="text-lg font-bold text-primary">{d.seen}</span>
+                  <div className="bg-background px-3 py-1 rounded-lg border border-border shadow-sm">
+                    <span className="text-base font-extrabold text-blue-600">{d.seen}</span>
+                  </div>
                 </li>
               ))}
             </ul>
           </Card>
         </div>
 
-        <Card className="p-5 shadow-card">
-          <h2 className="text-base font-semibold">Recent Activities</h2>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li className="flex justify-between border-b pb-2"><span>New admission — Asha Pillai (Maternity, Bed M-401)</span><span className="text-muted-foreground">10 min ago</span></li>
-            <li className="flex justify-between border-b pb-2"><span>Discharge generated — Mohit Jain (₹17,500)</span><span className="text-muted-foreground">28 min ago</span></li>
-            <li className="flex justify-between border-b pb-2"><span>Dr. Amit Sharma marked Token #12 as DONE</span><span className="text-muted-foreground">42 min ago</span></li>
-            <li className="flex justify-between"><span>OPD booking — Sneha Iyer (Token #12)</span><span className="text-muted-foreground">1 hr ago</span></li>
+        <Card className="p-6 shadow-card border-border">
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-foreground">Recent Activities</h2>
+          </div>
+          <ul className="space-y-1">
+            <li className="flex justify-between items-center py-3 border-b border-border last:border-0">
+              <span className="text-sm font-medium text-foreground">New admission — <span className="font-bold">Asha Pillai</span> (Maternity, Bed M-401)</span>
+              <span className="text-xs font-semibold text-muted-foreground bg-muted px-2 py-1 rounded-md">10 min ago</span>
+            </li>
+            <li className="flex justify-between items-center py-3 border-b border-border last:border-0">
+              <span className="text-sm font-medium text-foreground">Discharge generated — <span className="font-bold">Mohit Jain</span> (<span className="text-green-600">₹17,500</span>)</span>
+              <span className="text-xs font-semibold text-muted-foreground bg-muted px-2 py-1 rounded-md">28 min ago</span>
+            </li>
+            <li className="flex justify-between items-center py-3 border-b border-border last:border-0">
+              <span className="text-sm font-medium text-foreground">Dr. Amit Sharma marked Token #12 as <span className="text-green-600 font-bold">DONE</span></span>
+              <span className="text-xs font-semibold text-muted-foreground bg-muted px-2 py-1 rounded-md">42 min ago</span>
+            </li>
+            <li className="flex justify-between items-center py-3 border-b border-border last:border-0">
+              <span className="text-sm font-medium text-foreground">OPD booking — <span className="font-bold">Sneha Iyer</span> (Token #12)</span>
+              <span className="text-xs font-semibold text-muted-foreground bg-muted px-2 py-1 rounded-md">1 hr ago</span>
+            </li>
           </ul>
         </Card>
       </div>

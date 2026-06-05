@@ -14,45 +14,51 @@ export const Route = createFileRoute("/reception/")({
 function ReceptionDashboard() {
   return (
     <PortalShell role="reception" title="Reception Dashboard">
-      <div className="space-y-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="Today's Patients" value={summary.opdToday} icon={<Users className="h-5 w-5" />} />
-          <StatCard label="Waiting" value={queue.filter((q) => q.status === "Waiting").length} icon={<Clock className="h-5 w-5" />} accent="warning" />
-          <StatCard label="Admissions" value={summary.admissionsToday} icon={<Activity className="h-5 w-5" />} accent="info" />
-          <StatCard label="Available Beds" value={summary.availableBeds} icon={<BedDouble className="h-5 w-5" />} accent="success" />
+      <div className="space-y-8 max-w-7xl mx-auto pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <StatCard label="Today's Patients" value={summary.opdToday} icon={<Users />} trend="+15%" trendUp={true} />
+          <StatCard label="Waiting" value={queue.filter((q) => q.status === "Waiting").length} icon={<Clock />} accent="warning" trend="+2" trendUp={false} />
+          <StatCard label="Admissions" value={summary.admissionsToday} icon={<Activity />} accent="info" trend="-1" trendUp={false} />
+          <StatCard label="Available Beds" value={summary.availableBeds} icon={<BedDouble />} accent="success" trend="+2" trendUp={true} />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
-          <Card className="p-5 shadow-card">
-            <h2 className="font-semibold">Doctor Queue Summary</h2>
-            <Table className="mt-3">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Doctor</TableHead>
-                  <TableHead className="text-right">Waiting</TableHead>
-                  <TableHead className="text-right">Done</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {doctorActivity.map((d) => (
-                  <TableRow key={d.name}>
-                    <TableCell className="font-medium">{d.name}</TableCell>
-                    <TableCell className="text-right">{Math.max(0, 5 - Math.floor(d.seen / 5))}</TableCell>
-                    <TableCell className="text-right">{d.seen}</TableCell>
+        <div className="grid lg:grid-cols-2 gap-8">
+          <Card className="p-6 shadow-card border-border">
+            <div className="mb-4">
+              <h2 className="text-lg font-bold text-foreground">Doctor Queue Summary</h2>
+            </div>
+            <div className="rounded-xl border border-border overflow-hidden">
+              <Table>
+                <TableHeader className="bg-muted/50">
+                  <TableRow>
+                    <TableHead className="font-semibold text-muted-foreground">Doctor</TableHead>
+                    <TableHead className="text-right font-semibold text-muted-foreground">Waiting</TableHead>
+                    <TableHead className="text-right font-semibold text-muted-foreground">Done</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {doctorActivity.map((d) => (
+                    <TableRow key={d.name} className="hover:bg-muted/30">
+                      <TableCell className="font-medium text-foreground">{d.name}</TableCell>
+                      <TableCell className="text-right text-orange-600 font-semibold">{Math.max(0, 5 - Math.floor(d.seen / 5))}</TableCell>
+                      <TableCell className="text-right text-green-600 font-semibold">{d.seen}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </Card>
 
-          <Card className="p-5 shadow-card">
-            <h2 className="font-semibold">Recent Patients</h2>
-            <ul className="mt-3 divide-y">
+          <Card className="p-6 shadow-card border-border">
+            <div className="mb-4">
+              <h2 className="text-lg font-bold text-foreground">Recent Patients</h2>
+            </div>
+            <ul className="divide-y divide-slate-100">
               {patients.map((p) => (
-                <li key={p.id} className="py-2.5 flex items-center justify-between">
+                <li key={p.id} className="py-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium">{p.name}</p>
-                    <p className="text-xs text-muted-foreground">{p.id} • {p.gender}, {p.age}</p>
+                    <p className="text-sm font-bold text-foreground">{p.name}</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-0.5">{p.id} • {p.gender}, {p.age}</p>
                   </div>
                   <StatusPill status="Active" />
                 </li>

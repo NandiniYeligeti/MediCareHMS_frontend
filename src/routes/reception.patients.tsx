@@ -34,10 +34,12 @@ function PatientsPage() {
 
   return (
     <PortalShell role="reception" title="Patient Registration & History">
-      <div className="grid lg:grid-cols-3 gap-6">
-        <Card className="p-5 shadow-card lg:col-span-1">
-          <h2 className="font-semibold">Add Patient</h2>
-          <p className="text-xs text-muted-foreground">Auto-generates Patient ID on save</p>
+      <div className="max-w-7xl mx-auto pb-10 grid lg:grid-cols-3 gap-6">
+        <Card className="p-6 shadow-card border-border lg:col-span-1 h-fit">
+          <div className="mb-5">
+            <h2 className="text-lg font-extrabold text-foreground">Add Patient</h2>
+            <p className="text-sm font-medium text-muted-foreground mt-1">Auto-generates Patient ID on save</p>
+          </div>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -45,13 +47,13 @@ function PatientsPage() {
               setSaved(id);
               toast.success(`Patient registered: ${id}`);
             }}
-            className="mt-4 space-y-3"
+            className="space-y-4"
           >
             <Field label="Patient Name" placeholder="Full name" />
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label>Gender</Label>
-                <Select><SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                <Label className="font-semibold text-foreground">Gender</Label>
+                <Select><SelectTrigger className="bg-muted/50 border-border"><SelectValue placeholder="Select" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="m">Male</SelectItem>
                     <SelectItem value="f">Female</SelectItem>
@@ -61,55 +63,57 @@ function PatientsPage() {
               </div>
               <Field label="DOB" type="date" />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <Field label="Age" placeholder="Auto" />
               <Field label="Mobile" placeholder="9876543210" />
             </div>
             <Field label="Address" placeholder="Street, City" />
             <div className="space-y-1.5">
-              <Label>Blood Group</Label>
-              <Select><SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+              <Label className="font-semibold text-foreground">Blood Group</Label>
+              <Select><SelectTrigger className="bg-muted/50 border-border"><SelectValue placeholder="Select" /></SelectTrigger>
                 <SelectContent>
                   {["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex gap-2 pt-2">
-              <Button type="submit" className="bg-gradient-primary flex-1">Save</Button>
-              <Button type="reset" variant="outline">Clear</Button>
+            <div className="flex gap-3 pt-2">
+              <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white flex-1 shadow-sm font-bold">Save</Button>
+              <Button type="reset" variant="outline" className="border-border text-muted-foreground hover:bg-muted/50 font-bold">Clear</Button>
             </div>
             {saved && (
-              <div className="rounded-md border border-success/40 bg-success/10 p-3 text-sm">
-                <p className="font-medium text-success">Patient ID generated</p>
-                <p className="font-mono text-base mt-1">{saved}</p>
+              <div className="rounded-xl border border-green-200 bg-green-50 p-4 mt-4">
+                <p className="text-sm font-bold text-green-700">Patient ID generated</p>
+                <p className="font-mono text-xl font-extrabold text-green-900 mt-1">{saved}</p>
               </div>
             )}
           </form>
         </Card>
 
-        <Card className="p-5 shadow-card lg:col-span-2">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <h2 className="font-semibold">Patient Records</h2>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Card className="p-6 shadow-card border-border lg:col-span-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-lg font-extrabold text-foreground">Patient Records</h2>
+            </div>
+            <div className="relative w-full sm:w-auto">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search by name, ID, mobile..."
-                className="pl-8 w-64"
+                className="pl-9 w-full sm:w-72 bg-muted/50 border-border"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
             </div>
           </div>
-          <div className="mt-3 rounded-md border overflow-hidden">
+          <div className="rounded-xl border border-border overflow-hidden bg-background">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-muted/50">
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Gender / Age</TableHead>
-                  <TableHead>Mobile</TableHead>
-                  <TableHead>Visits</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead className="font-semibold text-muted-foreground">ID</TableHead>
+                  <TableHead className="font-semibold text-muted-foreground">Name</TableHead>
+                  <TableHead className="font-semibold text-muted-foreground">Gender / Age</TableHead>
+                  <TableHead className="font-semibold text-muted-foreground">Mobile</TableHead>
+                  <TableHead className="font-semibold text-muted-foreground">Visits</TableHead>
+                  <TableHead className="text-right font-semibold text-muted-foreground">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -118,27 +122,27 @@ function PatientsPage() {
                   const visits = h?.appointments.length ?? 0;
                   const admits = h?.admissions.length ?? 0;
                   return (
-                    <TableRow key={p.id}>
-                      <TableCell className="font-mono text-xs">{p.id}</TableCell>
-                      <TableCell className="font-medium">{p.name}</TableCell>
-                      <TableCell>{p.gender}, {p.age}</TableCell>
-                      <TableCell>{p.mobile}</TableCell>
+                    <TableRow key={p.id} className="hover:bg-muted/30 transition-colors">
+                      <TableCell className="font-mono text-xs text-muted-foreground font-medium">{p.id}</TableCell>
+                      <TableCell className="font-bold text-foreground">{p.name}</TableCell>
+                      <TableCell className="text-muted-foreground">{p.gender}, {p.age}</TableCell>
+                      <TableCell className="text-muted-foreground">{p.mobile}</TableCell>
                       <TableCell>
-                        <div className="flex gap-1.5">
-                          <Badge variant="secondary">{visits} OPD</Badge>
-                          {admits > 0 && <Badge className="bg-accent text-accent-foreground">{admits} Adm</Badge>}
+                        <div className="flex gap-2">
+                          <Badge variant="secondary" className="bg-muted text-foreground hover:bg-slate-200">{visits} OPD</Badge>
+                          {admits > 0 && <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">{admits} Adm</Badge>}
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button size="sm" variant="outline" onClick={() => setOpenId(p.id)}>
-                          <Eye className="h-4 w-4 mr-1" />History
+                        <Button size="sm" variant="outline" className="border-border text-blue-600 hover:bg-blue-50 font-semibold" onClick={() => setOpenId(p.id)}>
+                          <Eye className="h-4 w-4 mr-1.5" />History
                         </Button>
                       </TableCell>
                     </TableRow>
                   );
                 })}
                 {filtered.length === 0 && (
-                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No patients found</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-10 font-medium">No patients found</TableCell></TableRow>
                 )}
               </TableBody>
             </Table>
@@ -147,140 +151,149 @@ function PatientsPage() {
       </div>
 
       <Dialog open={!!openId} onOpenChange={(o) => !o && setOpenId(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-0 rounded-2xl">
           {selected && (
             <>
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5 text-primary" />
-                  {selected.name}
-                  <span className="font-mono text-xs text-muted-foreground ml-2">{selected.id}</span>
-                </DialogTitle>
-                <DialogDescription>Complete medical & billing history</DialogDescription>
-              </DialogHeader>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                <InfoTile icon={<User className="h-4 w-4" />} label="Gender / Age" value={`${selected.gender}, ${selected.age}`} />
-                <InfoTile icon={<Phone className="h-4 w-4" />} label="Mobile" value={selected.mobile} />
-                <InfoTile icon={<Droplet className="h-4 w-4" />} label="Blood" value={selected.blood} />
-                <InfoTile icon={<MapPin className="h-4 w-4" />} label="Address" value={selected.address} />
+              <div className="p-6 border-b border-border bg-muted/50 rounded-t-2xl">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-3 text-xl font-extrabold text-foreground">
+                    <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                      <User className="h-5 w-5" />
+                    </div>
+                    {selected.name}
+                    <span className="font-mono text-sm font-medium text-muted-foreground ml-2 bg-background px-2 py-1 rounded-md border border-border">{selected.id}</span>
+                  </DialogTitle>
+                  <DialogDescription className="text-muted-foreground font-medium ml-12">Complete medical & billing history</DialogDescription>
+                </DialogHeader>
               </div>
 
-              <SummaryStrip history={history} />
+              <div className="p-6 space-y-6 bg-background rounded-b-2xl">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <InfoTile icon={<User className="h-4 w-4" />} label="Gender / Age" value={`${selected.gender}, ${selected.age}`} />
+                  <InfoTile icon={<Phone className="h-4 w-4" />} label="Mobile" value={selected.mobile} />
+                  <InfoTile icon={<Droplet className="h-4 w-4" />} label="Blood" value={selected.blood} />
+                  <InfoTile icon={<MapPin className="h-4 w-4" />} label="Address" value={selected.address} />
+                </div>
 
-              <Tabs defaultValue="appointments" className="mt-2">
-                <TabsList className="grid grid-cols-3 w-full">
-                  <TabsTrigger value="appointments"><Calendar className="h-4 w-4 mr-1.5" />Appointments</TabsTrigger>
-                  <TabsTrigger value="admissions"><BedDouble className="h-4 w-4 mr-1.5" />Admissions</TabsTrigger>
-                  <TabsTrigger value="payments"><Wallet className="h-4 w-4 mr-1.5" />Payments</TabsTrigger>
-                </TabsList>
+                <SummaryStrip history={history} />
 
-                <TabsContent value="appointments">
-                  {history?.appointments.length ? (
-                    <div className="rounded-md border overflow-hidden">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Doctor</TableHead>
-                            <TableHead>Department</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead className="text-right">Fee</TableHead>
-                            <TableHead>Status</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {history.appointments.map((a, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="font-mono text-xs">{a.date}</TableCell>
-                              <TableCell className="font-medium">{a.doctor}</TableCell>
-                              <TableCell>{a.department}</TableCell>
-                              <TableCell><Badge variant="outline">{a.type}</Badge></TableCell>
-                              <TableCell className="text-right">{currency(a.fee)}</TableCell>
-                              <TableCell>
-                                <Badge className={
-                                  a.status === "Completed" ? "bg-success text-success-foreground" :
-                                  a.status === "Missed" ? "bg-destructive text-destructive-foreground" :
-                                  "bg-accent text-accent-foreground"
-                                }>{a.status}</Badge>
-                              </TableCell>
-                            </TableRow>
+                <Tabs defaultValue="appointments" className="mt-4">
+                  <TabsList className="grid grid-cols-3 w-full bg-muted p-1 rounded-xl">
+                    <TabsTrigger value="appointments" className="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold"><Calendar className="h-4 w-4 mr-2" />Appointments</TabsTrigger>
+                    <TabsTrigger value="admissions" className="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold"><BedDouble className="h-4 w-4 mr-2" />Admissions</TabsTrigger>
+                    <TabsTrigger value="payments" className="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold"><Wallet className="h-4 w-4 mr-2" />Payments</TabsTrigger>
+                  </TabsList>
+
+                  <div className="mt-4">
+                    <TabsContent value="appointments" className="m-0 focus-visible:outline-none">
+                      {history?.appointments.length ? (
+                        <div className="rounded-xl border border-border overflow-hidden">
+                          <Table>
+                            <TableHeader className="bg-muted/50">
+                              <TableRow>
+                                <TableHead className="font-semibold text-muted-foreground">Date</TableHead>
+                                <TableHead className="font-semibold text-muted-foreground">Doctor</TableHead>
+                                <TableHead className="font-semibold text-muted-foreground">Department</TableHead>
+                                <TableHead className="font-semibold text-muted-foreground">Type</TableHead>
+                                <TableHead className="text-right font-semibold text-muted-foreground">Fee</TableHead>
+                                <TableHead className="font-semibold text-muted-foreground">Status</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {history.appointments.map((a, i) => (
+                                <TableRow key={i} className="hover:bg-muted/30">
+                                  <TableCell className="font-mono text-xs text-muted-foreground">{a.date}</TableCell>
+                                  <TableCell className="font-bold text-foreground">{a.doctor}</TableCell>
+                                  <TableCell className="text-muted-foreground">{a.department}</TableCell>
+                                  <TableCell><Badge variant="outline" className="bg-muted/50 text-muted-foreground border-border">{a.type}</Badge></TableCell>
+                                  <TableCell className="text-right font-semibold text-foreground">{currency(a.fee)}</TableCell>
+                                  <TableCell>
+                                    <Badge className={
+                                      a.status === "Completed" ? "bg-green-100 text-green-700 hover:bg-green-200 border-0" :
+                                      a.status === "Missed" ? "bg-red-100 text-red-700 hover:bg-red-200 border-0" :
+                                      "bg-blue-100 text-blue-700 hover:bg-blue-200 border-0"
+                                    }>{a.status}</Badge>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      ) : <Empty label="No appointments yet" />}
+                    </TabsContent>
+
+                    <TabsContent value="admissions" className="m-0 focus-visible:outline-none">
+                      {history?.admissions.length ? (
+                        <div className="space-y-4">
+                          {history.admissions.map((a) => (
+                            <Card key={a.id} className="p-5 border-border shadow-sm rounded-xl overflow-hidden relative">
+                              <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
+                              <div className="flex items-start justify-between flex-wrap gap-2 pl-3">
+                                <div>
+                                  <p className="font-extrabold text-foreground flex items-center gap-3 text-base">
+                                    {a.id}
+                                    <Badge className={a.status === "Discharged" ? "bg-green-100 text-green-700 hover:bg-green-200 border-0" : "bg-blue-100 text-blue-700 hover:bg-blue-200 border-0"}>
+                                      {a.status}
+                                    </Badge>
+                                  </p>
+                                  <p className="text-sm font-medium text-muted-foreground mt-1.5">
+                                    {a.admittedOn} → {a.dischargedOn ?? "Ongoing"} • {a.days} days • <span className="text-foreground">{a.ward} ({a.bed})</span>
+                                  </p>
+                                  <p className="text-sm font-medium text-muted-foreground mt-0.5">Under: <span className="text-foreground">{a.doctor}</span></p>
+                                </div>
+                                <Button size="sm" variant="outline" className="border-border text-foreground hover:bg-muted/50 font-bold"><Printer className="h-4 w-4 mr-1.5 text-muted-foreground" />Bill</Button>
+                              </div>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5 text-sm bg-muted/50 p-4 rounded-lg ml-3">
+                                <Money label="Ward" value={a.wardCharges} />
+                                <Money label="Doctor" value={a.doctorCharges} />
+                                <Money label="Medicines" value={a.medicines} />
+                                <Money label="Tests" value={a.tests} />
+                              </div>
+                              <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-border text-sm ml-3">
+                                <Money label="Total" value={a.wardCharges + a.doctorCharges + a.medicines + a.tests} bold className="text-foreground text-base" />
+                                <Money label="Paid" value={a.paid} className="text-green-600 text-base" bold />
+                                <Money label="Balance" value={a.balance} className={a.balance > 0 ? "text-red-600 text-base" : "text-green-600 text-base"} bold />
+                              </div>
+                            </Card>
                           ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  ) : <Empty label="No appointments yet" />}
-                </TabsContent>
+                        </div>
+                      ) : <Empty label="No admission records" />}
+                    </TabsContent>
 
-                <TabsContent value="admissions">
-                  {history?.admissions.length ? (
-                    <div className="space-y-3">
-                      {history.admissions.map((a) => (
-                        <Card key={a.id} className="p-4">
-                          <div className="flex items-start justify-between flex-wrap gap-2">
-                            <div>
-                              <p className="font-semibold flex items-center gap-2">
-                                {a.id}
-                                <Badge className={a.status === "Discharged" ? "bg-success text-success-foreground" : "bg-accent text-accent-foreground"}>
-                                  {a.status}
-                                </Badge>
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-0.5">
-                                {a.admittedOn} → {a.dischargedOn ?? "Ongoing"} • {a.days} days • {a.ward} ({a.bed})
-                              </p>
-                              <p className="text-xs text-muted-foreground">Under: {a.doctor}</p>
-                            </div>
-                            <Button size="sm" variant="outline"><Printer className="h-3.5 w-3.5 mr-1" />Bill</Button>
+                    <TabsContent value="payments" className="m-0 focus-visible:outline-none">
+                      {history?.payments.length ? (
+                        <div className="rounded-xl border border-border overflow-hidden">
+                          <Table>
+                            <TableHeader className="bg-muted/50">
+                              <TableRow>
+                                <TableHead className="font-semibold text-muted-foreground">Date</TableHead>
+                                <TableHead className="font-semibold text-muted-foreground">Purpose</TableHead>
+                                <TableHead className="font-semibold text-muted-foreground">Mode</TableHead>
+                                <TableHead className="font-semibold text-muted-foreground">Reference</TableHead>
+                                <TableHead className="text-right font-semibold text-muted-foreground">Amount</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {history.payments.map((p, i) => (
+                                <TableRow key={i} className="hover:bg-muted/30">
+                                  <TableCell className="font-mono text-xs text-muted-foreground">{p.date}</TableCell>
+                                  <TableCell className="font-medium text-foreground">{p.purpose}</TableCell>
+                                  <TableCell><Badge variant="outline" className="bg-muted/50 text-muted-foreground border-border">{p.mode}</Badge></TableCell>
+                                  <TableCell className="font-mono text-xs text-muted-foreground">{p.ref}</TableCell>
+                                  <TableCell className="text-right font-bold text-foreground">{currency(p.amount)}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                          <div className="flex justify-end p-4 bg-muted/50 border-t border-border text-sm">
+                            <span className="font-extrabold text-foreground text-base">Total Collected: <span className="text-green-600">{currency(history.payments.reduce((s, p) => s + p.amount, 0))}</span></span>
                           </div>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 text-sm">
-                            <Money label="Ward" value={a.wardCharges} />
-                            <Money label="Doctor" value={a.doctorCharges} />
-                            <Money label="Medicines" value={a.medicines} />
-                            <Money label="Tests" value={a.tests} />
-                          </div>
-                          <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t text-sm">
-                            <Money label="Total" value={a.wardCharges + a.doctorCharges + a.medicines + a.tests} bold />
-                            <Money label="Paid" value={a.paid} className="text-success" />
-                            <Money label="Balance" value={a.balance} className={a.balance > 0 ? "text-destructive" : "text-success"} bold />
-                          </div>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : <Empty label="No admission records" />}
-                </TabsContent>
-
-                <TabsContent value="payments">
-                  {history?.payments.length ? (
-                    <div className="rounded-md border overflow-hidden">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Purpose</TableHead>
-                            <TableHead>Mode</TableHead>
-                            <TableHead>Reference</TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {history.payments.map((p, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="font-mono text-xs">{p.date}</TableCell>
-                              <TableCell>{p.purpose}</TableCell>
-                              <TableCell><Badge variant="outline">{p.mode}</Badge></TableCell>
-                              <TableCell className="font-mono text-xs">{p.ref}</TableCell>
-                              <TableCell className="text-right font-medium">{currency(p.amount)}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                      <div className="flex justify-end p-3 bg-muted/50 border-t text-sm">
-                        <span className="font-semibold">Total Collected: {currency(history.payments.reduce((s, p) => s + p.amount, 0))}</span>
-                      </div>
-                    </div>
-                  ) : <Empty label="No payment history" />}
-                </TabsContent>
-              </Tabs>
+                        </div>
+                      ) : <Empty label="No payment history" />}
+                    </TabsContent>
+                  </div>
+                </Tabs>
+              </div>
             </>
           )}
         </DialogContent>
@@ -296,10 +309,10 @@ function SummaryStrip({ history }: { history: { appointments: any[]; admissions:
   const outstanding = history?.admissions.reduce((s, a) => s + a.balance, 0) ?? 0;
   const lastVisit = history?.appointments[0]?.date ?? "—";
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 rounded-lg bg-gradient-subtle border">
-      <Stat label="Total Appointments" value={String(totalAppts)} />
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 shadow-inner">
+      <Stat label="Appointments" value={String(totalAppts)} />
       <Stat label="Admissions" value={String(totalAdm)} />
-      <Stat label="Total Paid" value={currency(totalPaid)} />
+      <Stat label="Total Paid" value={currency(totalPaid)} tone="success" />
       <Stat label="Outstanding" value={currency(outstanding)} tone={outstanding > 0 ? "destructive" : "success"} />
       <Stat label="Last Visit" value={lastVisit} />
     </div>
@@ -308,18 +321,21 @@ function SummaryStrip({ history }: { history: { appointments: any[]; admissions:
 
 function Stat({ label, value, tone }: { label: string; value: string; tone?: "destructive" | "success" }) {
   return (
-    <div>
-      <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className={`text-base font-semibold ${tone === "destructive" ? "text-destructive" : tone === "success" ? "text-success" : ""}`}>{value}</p>
+    <div className="bg-background/60 p-3 rounded-lg border border-white/50 backdrop-blur-sm">
+      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">{label}</p>
+      <p className={`text-lg font-extrabold ${tone === "destructive" ? "text-red-600" : tone === "success" ? "text-green-600" : "text-foreground"}`}>{value}</p>
     </div>
   );
 }
 
 function InfoTile({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-md border p-2.5">
-      <p className="text-[11px] uppercase text-muted-foreground flex items-center gap-1.5">{icon}{label}</p>
-      <p className="font-medium mt-0.5 truncate">{value}</p>
+    <div className="rounded-xl border border-border p-3.5 bg-muted/30 flex flex-col justify-center">
+      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-1.5">
+        <span className="text-blue-500">{icon}</span>
+        {label}
+      </p>
+      <p className="font-bold text-foreground truncate text-sm">{value}</p>
     </div>
   );
 }
@@ -327,21 +343,21 @@ function InfoTile({ icon, label, value }: { icon: React.ReactNode; label: string
 function Money({ label, value, className = "", bold = false }: { label: string; value: number; className?: string; bold?: boolean }) {
   return (
     <div>
-      <p className="text-[11px] uppercase text-muted-foreground">{label}</p>
-      <p className={`${bold ? "font-bold" : "font-medium"} ${className}`}>{currency(value)}</p>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">{label}</p>
+      <p className={`${bold ? "font-extrabold" : "font-bold"} text-foreground ${className}`}>{currency(value)}</p>
     </div>
   );
 }
 
 function Empty({ label }: { label: string }) {
-  return <div className="text-center text-muted-foreground py-10 border rounded-md">{label}</div>;
+  return <div className="text-center text-muted-foreground py-12 border border-border border-dashed rounded-xl bg-muted/30 font-medium">{label}</div>;
 }
 
 function Field({ label, ...p }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div className="space-y-1.5">
-      <Label>{label}</Label>
-      <Input {...p} />
+      <Label className="font-semibold text-foreground">{label}</Label>
+      <Input {...p} className="bg-muted/50 border-border focus-visible:ring-blue-500" />
     </div>
   );
 }

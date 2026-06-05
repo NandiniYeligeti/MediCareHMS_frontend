@@ -91,7 +91,6 @@ const menus: Record<Role, { label: string; items: Item[] }[]> = {
       label: "Directory",
       items: [
         { title: "Staff", url: "/reception/staff", icon: Users },
-        { title: "Messages", url: "/reception/messages", icon: MessageSquare, badge: 2 },
         { title: "Settings", url: "/settings", icon: Settings },
      
       ],
@@ -114,7 +113,6 @@ const menus: Record<Role, { label: string; items: Item[] }[]> = {
     {
       label: "Account",
       items: [
-        { title: "Messages", url: "/doctor/messages", icon: MessageSquare, badge: 2 },
         { title: "Settings", url: "/settings", icon: Settings },
       
       ],
